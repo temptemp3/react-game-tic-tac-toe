@@ -123,8 +123,13 @@ class Game extends React.Component {
       const loc = move ? 
         "Player choose " + history[move].moveLocation :
 	""
+      const current =(
+        move == this.state.stepNumber && 
+	move != history.length - 1
+	? "current" : ""
+      )
       return (
-        <li key={move}>
+        <li class={current} key={move}>
 	<small>{loc}</small>
 	<button onClick={() => this.jumpTo(move)}>{desc}</button>
         </li>

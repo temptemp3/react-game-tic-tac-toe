@@ -49,3 +49,6 @@ ol, ul {
   margin-left: 20px;
 }
 
+.game-info li.current {
+  font-weight: 600;
+}
