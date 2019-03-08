@@ -90,6 +90,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      order: "asc"
     }
   }
 
@@ -114,11 +115,53 @@ class Game extends React.Component {
     })
   }
 
+  otherOrder() {
+    return (
+      this.isOrderAsc() ? "desc" : "asc"
+    )
+  }
+
+  toggleOrder() {
+    this.setState({
+      order: this.otherOrder()
+    })
+  }
+
+  isOrderAsc() {
+    return (
+      this.state.order == "asc"
+    )
+  }
+
   jumpTo(step) {
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
     });
+  }
+
+  renderMoves(history) {
+    return (
+      history.map((step, move) => {
+        const desc = move ?
+          'Go to move #' + move :
+          'Go to game start';
+        const loc = move ? 
+          "Player choose " + history[move].moveLocation :
+  	""
+        const current =(
+          move == this.state.stepNumber && 
+  	  move != history.length - 1
+  	  ? "current" : ""
+        )
+        return (
+          <li class={current} key={move}>
+  	<small>{loc}</small>
+  	<button onClick={() => this.jumpTo(move)}>{desc}</button>
+          </li>
+        );
+      })
+    )
   }
 
   render() {
@@ -127,25 +170,18 @@ class Game extends React.Component {
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
-    const moves = history.map((step, move) => {
-      const desc = move ?
-        'Go to move #' + move :
-        'Go to game start';
-      const loc = move ? 
-        "Player choose " + history[move].moveLocation :
-	""
-      const current =(
-        move == this.state.stepNumber && 
-	move != history.length - 1
-	? "current" : ""
-      )
-      return (
-        <li class={current} key={move}>
-	<small>{loc}</small>
-	<button onClick={() => this.jumpTo(move)}>{desc}</button>
-        </li>
-      );
-    });
+    // order
+    const order = this.state.order
+    // testing
+    //const order = "asc"
+    //const order = "desc"
+
+    // moves
+    const moves = (
+      order == "desc" ? 
+      this.renderMoves(history) : 
+      this.renderMoves(history).reverse()
+    )
 
     let status
     if (winner) {
@@ -163,8 +199,11 @@ class Game extends React.Component {
 	  />
         </div>
         <div className="game-info">
+	　<button onClick={() => this.toggleOrder()}>
+	  {this.otherOrder()}
+	  </button>
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <ol>{moves.reverse()}</ol>
         </div>
       </div>
     );
