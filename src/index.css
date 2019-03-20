@@ -34,6 +34,9 @@ ol, ul {
 
 .square:focus {
   outline: none;
+  /*
+  background: Honeydew;
+  */
 }
 
 .kbd-navigation .square:focus {
@@ -51,4 +54,9 @@ ol, ul {
 
 .game-info li.current {
   font-weight: 600;
+}
+
+.winner {
+  color:white;
+  background-color:black;
 }
